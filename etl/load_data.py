@@ -3,7 +3,10 @@ import os
 import re
 import pandas as pd
 import clickhouse_connect
+from dotenv import load_dotenv
+import os
 
+load_dotenv()
 DATA_DIR = "data"
 
 client = clickhouse_connect.get_client(

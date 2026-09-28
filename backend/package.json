@@ -1,0 +1,12 @@
+{
+  "name": "telemetry-backend",
+  "type": "module",
+  "scripts": {
+    "dev": "node --watch src/index.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "cors": "^2.8.5",
+    "@clickhouse/client": "^1.8.1"
+  }
+}

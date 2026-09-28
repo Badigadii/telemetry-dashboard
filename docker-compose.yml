@@ -14,5 +14,34 @@ services:
         soft: 262144
         hard: 262144
 
+  backend:
+    image: node:22-alpine
+    working_dir: /app
+    volumes:
+      - ./backend:/app
+    command: sh -c "npm install && npm run dev"
+    ports:
+      - "3001:3001"
+    environment:
+      CH_URL: http://clickhouse:8123
+      CH_USER: default
+      CH_PASSWORD: ${CLICKHOUSE_PASSWORD}
+    depends_on:
+      - clickhouse
+
+  frontend:
+    image: node:22-alpine
+    working_dir: /app
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    command: sh -c "npm install && npm run dev"
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+      
 volumes:
   ch_data:
+
+  

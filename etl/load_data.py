@@ -1,19 +1,19 @@
 import glob
 import os
 import re
+from dotenv import load_dotenv
 import pandas as pd
 import clickhouse_connect
-from dotenv import load_dotenv
-import os
 
 load_dotenv()
+
 DATA_DIR = "data"
 
 client = clickhouse_connect.get_client(
     host="localhost",
     port=8123,
     username="default",
-    password="anton123"
+    password=os.getenv("CLICKHOUSE_PASSWORD")
 )
 
 files = sorted(glob.glob(os.path.join(DATA_DIR, "yellow_tripdata_*.parquet")))
@@ -49,7 +49,6 @@ for path in files:
 
     df["congestion_surcharge"] = df["congestion_surcharge"].fillna(0).astype("float64")
 
-    # Идемпотентность: удаляем месяц, если он уже был загружен
     client.command(
         f"DELETE FROM trips WHERE toYear(ts) = {year} AND toMonth(ts) = {month}"
     )
